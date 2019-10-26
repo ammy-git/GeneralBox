@@ -1,0 +1,56 @@
+#!/bin/bash
+sudo su
+yum update -y
+yum install httpd -y
+echo "Love you" > /var/www/html/index.html
+service httpd start
+chkconfig httpd on
+
+wordpress with php apache installation
+----------------------------------------
+sudo su -
+yum update -y
+yum remove httpd* php* -y
+amazon-linux-extras install php7.1 -y
+yum install httpd -y
+cd /var/www/html
+
+wget https://wordpress.org/latest.tar.gz
+
+tar -xzf latest.tar.gz
+
+cp -r wordpress/* /var/www/html/
+
+rm -rf wordpress
+ 
+rm -rf latest.tar.gz
+chmod -R 755 wp-content
+
+chown -R apache:apache wp-content
+
+service httpd start
+
+chkconfig httpd on
+
+
+
+
+wget https://s3.amazonaws.com/bucketforwordpresslab-donotdelete/htaccess.txt
+mv htaccess.txt .htaccess
+
+s3 bucket policy for public access:
+------------------------------------
+{
+  "Version":"2012-10-17",
+  "Statement":[{
+	"Sid":"PublicReadGetObject",
+        "Effect":"Allow",
+	  "Principal": "*",
+      "Action":["s3:GetObject"],
+      "Resource":["arn:aws:s3:::example-bucket/*"
+      ]
+    }
+  ]
+}
+
+9052803840
